@@ -21,7 +21,7 @@ new Item('cthulhu.jpg', 'Cthulhu', 'cthulhu');
 new Item('dog-duck.jpg', 'Duck mask for dogs', 'dog-duck');
 new Item('dragon.jpg', 'Dragon', 'dragon');
 new Item('pen.jpg', 'Pen', 'pen');
-new Item('pet-sweep.jpg', 'Sweeuping suit for animal feet', 'pet-sweep');
+new Item('pet-sweep.jpg', 'Sweeping suit for animal feet', 'pet-sweep');
 new Item('scissors.jpg', 'Scissors', 'scissors');
 new Item('shark.jpg', 'Shark', 'shark');
 new Item('sweep.png', 'Sweeping suit to make dusty babies', 'sweep');
@@ -34,7 +34,7 @@ new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 let previousThree = []; // temporary variable to store past three randIdx
 let randIdx; // random index
 let currentThree; // stores current three randIdx
-let totalVotes = 0;
+let totalVotes = 0; // how do I wrap this in a closure?
 
 // chooses 3 random numbers between 0 and 19.
 function chooseRandomThree() {
@@ -105,18 +105,23 @@ function stopAtTwentyFive() {
   list.style.display = 'block';
   // debugger;
   Item.allItems.forEach(item => {
-    let li = createLineItem('li', item.id, item.votes, item.filepath);
+    let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
     // debugger;
   });
 }
 
-function createLineItem(type, id, content, src) {
+function createLineItem(type, displayName, id, votes, src) {
   let li = document.createElement(type);
   li.id = id;
-  li.textContent = `${content} votes`;
+  if (votes < 2 && votes !== 0) {
+    li.textContent = `${votes} vote for the ${displayName}`;
+  } else {
+    li.textContent = `${votes} votes for the ${displayName}`;
+  }
 
-  return appendImage(li, src);
+  // return appendImage(li, src);
+  return li;
 }
 
 function appendImage(li, src) {
