@@ -62,10 +62,12 @@ function appendImages(n) {
 
   chooseRandom(n);
 
+  // if image elements don't already exist on the page
   if (!document.querySelectorAll('img').length) {
     for (let i = 0; i < currentSet.length; i++) {
-      // locate item object
+      // locate item object to append
       let item = Item.allItems[currentSet[i]];
+      item.views++;
       // create div and image
       divAndImg = createImg(item.filepath, item.id);
       // append div and image to display-pics section
