@@ -35,6 +35,7 @@ let previousThree = []; // temporary variable to store past three randIdx
 let randIdx; // random index
 let currentThree; // stores current three randIdx
 let totalVotes = 0; // how do I wrap this in a closure?
+let listDisplayCount = 0;
 
 // chooses 3 random numbers between 0 and 19.
 function chooseRandomThree() {
@@ -82,7 +83,7 @@ const handleClick = (img) => {
   // append three new images if not reached max votes
   if (totalVotes < 25) {
     appendThree();
-  } else {
+  } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
   }
 };
@@ -102,13 +103,14 @@ function stopAtTwentyFive() {
   document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
 
   let list = document.querySelectorAll('.results')[0];
+  // change display none to display block for results section
   list.style.display = 'block';
-  // debugger;
   Item.allItems.forEach(item => {
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
-    // debugger;
   });
+
+  listDisplayCount++;
 }
 
 function createLineItem(type, displayName, id, votes, src) {
