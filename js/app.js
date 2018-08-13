@@ -31,11 +31,11 @@ new Item('usb.gif', 'USB', 'usb');
 new Item('water-can.jpg', 'Water can', 'water-can');
 new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 
-let previousThree = []; // temporary variable to store past three randIdx
+let currentSet; // stores current set of random indeces
+let previousSet = []; // temporarily stores current set of random indeces to check against values displayed immediately before
 let randIdx; // random index
-let currentThree; // stores current three randIdx
 let totalVotes = 0; // how do I wrap this in a closure?
-let listDisplayCount = 0;
+let listDisplayCount = 0; // prevent double appending results list
 
 // chooses 3 random numbers between 0 and 19.
 function chooseRandomThree() {
@@ -53,23 +53,54 @@ function chooseRandomThree() {
   previousThree = currentThree;
 }
 
-function appendThree() {
-  // index of each randIdx in currentThree array starts at 0, ends at 2
-  let index = 0;
-  chooseRandomThree();
+// choose n random numbers
+function chooseRandom(n) {
+  currentSet = [];
 
-  // iterate over img elements and set .src property
-  document.querySelectorAll('img').forEach(img => {
-    let randItem;
-    // select random item from all items
-    randItem = Item.allItems[currentThree[index]];
-    // increment number of times item has been viewed
-    randItem.views++;
-    // set img.src equal to randItem.filepath
-    img.src = randItem.filepath;
-    img.id = randItem.id;
-    index++;
-  });
+  while (currentSet.length < n) {
+    randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
+
+    if (!currentSet.includes(randIdx) && !previousSet.includes(randIdx)) {
+      // push unique values into current array
+      currentSet.push(randIdx);
+    } else {
+      randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
+    }
+  }
+
+  // set temporary values to compare against next set of random numbers
+  previousSet = currentSet;
+}
+
+// append images to display-pics html section that currently has display set to none
+function appendImages(n) {
+  let divAndImg;
+
+  chooseRandom(n);
+
+  if (!document.querySelectorAll('img').length) {
+    for (let i = 0; i < currentSet.length; i++) {
+      // locate item object
+      let item = Item.allItems[currentSet[i]];
+      // create div and image
+      divAndImg = createImg(item.filepath, item.id);
+      // append div and image to display-pics section
+      document.getElementsByClassName('display-pics')[0].appendChild(divAndImg);
+    }
+  } else {
+    let index = 0;
+    // iterate over img elements and set .src property
+    document.querySelectorAll('img').forEach(img => {
+      let randItem;
+      // select random item from all items
+      randItem = Item.allItems[currentSet[index]];
+      // increment number of times item has been viewed
+      randItem.views++;
+      img.id = randItem.id;
+      img.src = randItem.filepath;
+      index++;
+    });
+  }
 }
 
 // save event handler to variable in order to remove event listener later
@@ -82,7 +113,8 @@ const handleClick = (img) => {
   totalVotes++;
   // append three new images if not reached max votes
   if (totalVotes < 25) {
-    appendThree();
+    // appendThree();
+    appendImages(n);
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
   }
@@ -94,9 +126,6 @@ function attachEventListeners() {
     img.addEventListener('click', () => handleClick(img));
   });
 }
-
-appendThree();
-attachEventListeners();
 
 // turn off event listeners, display total tallies
 function stopAtTwentyFive() {
@@ -133,3 +162,18 @@ function appendImage(li, src) {
   li.appendChild(img);
   return li;
 }
+
+function createImg(filepath, id) {
+  let div = document.createElement('div');
+  let img = document.createElement('img');
+  img.src = filepath;
+  img.id = id;
+  div.appendChild(img);
+
+  return div;
+}
+
+
+const n = 6;
+appendImages(n);
+attachEventListeners();
