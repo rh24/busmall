@@ -5,7 +5,7 @@
 // Upon receiving a click, three new non-duplicating random images need to be automatically displayed. In other words, the three images that are displayed should contain no duplicates, nor should they duplicate with any images that we displayed immediately before.
 
 function Item(filepath, displayName, id) {
-  this.filepath = filepath;
+  this.filepath = `./assets/${filepath}`;
   this.displayName = displayName;
   this.id = id;
   this.votes = 0;
@@ -16,9 +16,41 @@ function Item(filepath, displayName, id) {
 
 Item.allItems = [];
 
-function attachEventListeners() {
+new Item('bag.jpg', 'R2D2 Bag', 'bag');
+new Item('banana.jpg', 'Banana', 'banana');
+new Item('bathroom.jpg', 'Bathroom', 'bathroom');
+new Item('boots.jpg', 'Boots', 'boots');
+new Item('breakfast.jpg', 'Breakfast', 'breakfast');
+new Item('bubblegum.jpg', 'Bubblegum', 'bubblegum');
+new Item('chair.jpg', 'Chair', 'chair');
+new Item('cthulhu.jpg', 'Cthulhu', 'cthulhu');
+new Item('dog-duck.jpg', 'Duck mask for dogs', 'dog-duck');
+new Item('dragon.jpg', 'Dragon', 'dragon');
+new Item('pen.jpg', 'Pen', 'pen');
+new Item('pet-sweep.jpg', 'Sweeuping suit for animal feet', 'pet-sweep');
+new Item('scissors.jpg', 'Scissors', 'scissors');
+new Item('shark.jpg', 'Shark', 'shark');
+new Item('sweep.png', 'Sweeping suit to make dusty babies', 'sweep');
+new Item('tauntaun.jpg', 'Tauntaun', 'tauntaun');
+new Item('unicorn.jpg', 'Unicorn', 'unicorn');
+new Item('usb.gif', 'USB', 'usb');
+new Item('water-can.jpg', 'Water can', 'water-can');
+new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 
+function displayThreeItems() {
+  document.querySelectorAll('img').forEach(img => {
+    // choose random index
+    let randIdx = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+    // select random item from all items
+    let randItem = Item.allItems[randIdx];
+    // set img.src equal to randItem.filepath
+    img.src = randItem.filepath;
+  });
 }
+
+displayThreeItems();
+// append random three pics onto page by img.src property
+// document.querySelectorAll;
 
 
 // you'll want a constructor function that creates an object associated with each image, and has (at a minimum) properties for the name of the image (to be used for display purposes), its filepath, the number of times it has been shown, and the number of times it has been clicked. You'll probably find it useful to create a property that contains a text string you can use as an ID in HTML.
