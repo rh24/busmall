@@ -1,9 +1,3 @@
-// add event listeners
-
-// track amount of clicks
-// track # times displayed
-// Upon receiving a click, three new non-duplicating random images need to be automatically displayed. In other words, the three images that are displayed should contain no duplicates, nor should they duplicate with any images that we displayed immediately before.
-
 function Item(filepath, displayName, id) {
   this.filepath = `./assets/${filepath}`;
   this.displayName = displayName;
@@ -92,14 +86,6 @@ function attachEventListeners() {
 
 appendThree();
 attachEventListeners();
-// img on click
-// increment votes on item object
-// appendThree() new images
-
-
-// append random three pics onto page by img.src property
-// document.querySelectorAll;
-
 
 // you'll want a constructor function that creates an object associated with each image, and has (at a minimum) properties for the name of the image (to be used for display purposes), its filepath, the number of times it has been shown, and the number of times it has been clicked. You'll probably find it useful to create a property that contains a text string you can use as an ID in HTML.
 
