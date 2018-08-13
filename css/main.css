@@ -1,3 +1,14 @@
 .results {
   display: none;
 }
+
+.display-pics div {
+  display: inline-block;
+  margin: 10px;
+  border: 2px solid grey;
+}
+
+.display-pics div img {
+  width: 200px;
+  height: 200px;
+}
