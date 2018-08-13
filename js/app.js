@@ -124,6 +124,7 @@ function createLineItem(type, displayName, id, votes, src) {
   return li;
 }
 
+// use if wanting to display image instead of display name
 function appendImage(li, src) {
   let img = document.createElement('img');
   img.src = src;
