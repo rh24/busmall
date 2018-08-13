@@ -37,12 +37,14 @@ new Item('usb.gif', 'USB', 'usb');
 new Item('water-can.jpg', 'Water can', 'water-can');
 new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 
-let previousThree = [];
-let currentThree = [];
-let randIdx;
+let previousThree = []; // temporary variable to store past three randIdx
+let randIdx; // random index
+let currentThree; // stores current three randIdx
 
 // chooses 3 random numbers between 0 and 19.
 function chooseRandomThree() {
+  currentThree = [];
+
   while (currentThree.length < 3 ) {
     randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
 
@@ -55,11 +57,12 @@ function chooseRandomThree() {
   previousThree = currentThree;
 }
 
-// index of each randIdx in currentThree array starts at 0, ends at 2
-let index = 0;
-
 function appendThree() {
+  // index of each randIdx in currentThree array starts at 0, ends at 2
+  let index = 0;
   chooseRandomThree();
+
+  // iterate over img elements and set .src property
   document.querySelectorAll('img').forEach(img => {
     let randItem;
     // select random item from all items
@@ -72,8 +75,12 @@ function appendThree() {
   });
 }
 
-
 appendThree();
+
+// event listener for images
+document.getElementsByTagName('nav')[0].addEventListener('click', () => {
+  appendThree();
+});
 
 // img on click
 // increment votes on item object
