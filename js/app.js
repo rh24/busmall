@@ -71,17 +71,27 @@ function appendThree() {
     randItem.views++;
     // set img.src equal to randItem.filepath
     img.src = randItem.filepath;
+    img.id = randItem.id;
     index++;
   });
 }
 
+// add event listeners for images
+function attachEventListeners() {
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('click', () => {
+      // find which item is being upvoted
+      let foundItem = Item.allItems.find(item => item.id === img.id);
+      // increcment votes on the item object
+      foundItem.votes++;
+      // append three new images
+      appendThree();
+    });
+  });
+}
+
 appendThree();
-
-// event listener for images
-document.getElementsByTagName('nav')[0].addEventListener('click', () => {
-  appendThree();
-});
-
+attachEventListeners();
 // img on click
 // increment votes on item object
 // appendThree() new images
