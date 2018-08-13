@@ -37,22 +37,6 @@ let randIdx; // random index
 let totalVotes = 0; // how do I wrap this in a closure?
 let listDisplayCount = 0; // prevent double appending results list
 
-// chooses 3 random numbers between 0 and 19.
-function chooseRandomThree() {
-  currentThree = [];
-
-  while (currentThree.length < 3 ) {
-    randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
-
-    if (!currentThree.includes(randIdx) && !previousThree.includes(randIdx)) {
-      currentThree.push(randIdx);
-    } else {
-      chooseRandomThree();
-    }
-  }
-  previousThree = currentThree;
-}
-
 // choose n random numbers
 function chooseRandom(n) {
   currentSet = [];
@@ -142,7 +126,7 @@ function stopAtTwentyFive() {
   listDisplayCount++;
 }
 
-function createLineItem(type, displayName, id, votes, src) {
+function createLineItem(type, displayName, id, votes) { // add src parameter if wanting to return appended image
   let li = document.createElement(type);
   li.id = id;
   if (votes < 2 && votes !== 0) {
@@ -156,12 +140,12 @@ function createLineItem(type, displayName, id, votes, src) {
 }
 
 // use if wanting to display image instead of display name
-function appendImage(li, src) {
-  let img = document.createElement('img');
-  img.src = src;
-  li.appendChild(img);
-  return li;
-}
+// function appendImage(li, src) {
+//   let img = document.createElement('img');
+//   img.src = src;
+//   li.appendChild(img);
+//   return li;
+// }
 
 function createImg(filepath, id) {
   let div = document.createElement('div');
