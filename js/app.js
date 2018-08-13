@@ -34,6 +34,7 @@ new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 let previousThree = []; // temporary variable to store past three randIdx
 let randIdx; // random index
 let currentThree; // stores current three randIdx
+let totalVotes = 0;
 
 // chooses 3 random numbers between 0 and 19.
 function chooseRandomThree() {
@@ -70,22 +71,60 @@ function appendThree() {
   });
 }
 
+// save event handler to variable in order to remove event listener later
+const handleClick = (img) => {
+  // find which item is being upvoted
+  let foundItem = Item.allItems.find(item => item.id === img.id);
+  // increcment votes on the item object
+  foundItem.votes++;
+  // increment total votes
+  totalVotes++;
+  // append three new images if not reached max votes
+  if (totalVotes < 25) {
+    appendThree();
+  } else {
+    stopAtTwentyFive();
+  }
+};
+
 // add event listeners for images
 function attachEventListeners() {
   document.querySelectorAll('img').forEach(img => {
-    img.addEventListener('click', () => {
-      // find which item is being upvoted
-      let foundItem = Item.allItems.find(item => item.id === img.id);
-      // increcment votes on the item object
-      foundItem.votes++;
-      // append three new images
-      appendThree();
-    });
+    img.addEventListener('click', () => handleClick(img));
   });
 }
 
 appendThree();
 attachEventListeners();
+
+// turn off event listeners, display total tallies
+function stopAtTwentyFive() {
+  document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
+
+  let list = document.querySelectorAll('.results')[0];
+  list.style.display = 'block';
+  // debugger;
+  Item.allItems.forEach(item => {
+    let li = createLineItem('li', item.id, item.votes, item.filepath);
+    list.appendChild(li);
+    // debugger;
+  });
+}
+
+function createLineItem(type, id, content, src) {
+  let li = document.createElement(type);
+  li.id = id;
+  li.textContent = `${content} votes`;
+
+  return appendImage(li, src);
+}
+
+function appendImage(li, src) {
+  let img = document.createElement('img');
+  img.src = src;
+  li.appendChild(img);
+  return li;
+}
 
 // you'll want a constructor function that creates an object associated with each image, and has (at a minimum) properties for the name of the image (to be used for display purposes), its filepath, the number of times it has been shown, and the number of times it has been clicked. You'll probably find it useful to create a property that contains a text string you can use as an ID in HTML.
 
