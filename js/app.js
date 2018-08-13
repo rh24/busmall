@@ -37,18 +37,49 @@ new Item('usb.gif', 'USB', 'usb');
 new Item('water-can.jpg', 'Water can', 'water-can');
 new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 
-function displayThreeItems() {
+let previousThree = [];
+let currentThree = [];
+let randIdx;
+
+// chooses 3 random numbers between 0 and 19.
+function chooseRandomThree() {
+  while (currentThree.length < 3 ) {
+    randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
+
+    if (!currentThree.includes(randIdx) && !previousThree.includes(randIdx)) {
+      currentThree.push(randIdx);
+    } else {
+      chooseRandomThree();
+    }
+  }
+  previousThree = currentThree;
+}
+
+// index of each randIdx in currentThree array starts at 0, ends at 2
+let index = 0;
+
+function appendThree() {
+  chooseRandomThree();
   document.querySelectorAll('img').forEach(img => {
-    // choose random index
-    let randIdx = Math.floor(Math.random() * (20 - 1 + 1)) + 1;
+    let randItem;
     // select random item from all items
-    let randItem = Item.allItems[randIdx];
+    randItem = Item.allItems[currentThree[index]];
+    // increment number of times item has been viewed
+    randItem.views++;
     // set img.src equal to randItem.filepath
     img.src = randItem.filepath;
+    index++;
   });
 }
 
-displayThreeItems();
+
+appendThree();
+
+// img on click
+// increment votes on item object
+// appendThree() new images
+
+
 // append random three pics onto page by img.src property
 // document.querySelectorAll;
 
