@@ -1,9 +1,7 @@
 'use strict';
-// import Chart from 'chartjs'; // THis is an ES6 module way to include
-// https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js
-var Chart = require('chart.js');
-var ctx = document.getElementById('myChart');
-var myChart = new Chart(ctx, {
+
+let ctx = document.getElementById('myChart');
+let myChart = new Chart(ctx, {
   type: 'bar',
   data: {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -39,8 +37,6 @@ var myChart = new Chart(ctx, {
     }
   }
 });
-// debugger;
-document.getElementsByClassName('chart')[0].append(myChart);
 
 function Item(filepath, displayName, id) {
   this.filepath = `./assets/${filepath}`;
@@ -95,7 +91,6 @@ function chooseRandom(n) {
       randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
     }
   }
-
   // set temporary values to compare against next set of random numbers
   previousSet = currentSet;
 }
@@ -103,6 +98,7 @@ function chooseRandom(n) {
 // append images to display-pics html section
 function appendImages(n) {
   let divAndImg;
+  let displaySection = document.getElementsByClassName('display-pics')[0];
 
   chooseRandom(n);
 
@@ -115,7 +111,7 @@ function appendImages(n) {
       // create div and image
       divAndImg = createImg(item.filepath, item.id);
       // append div and image to display-pics section
-      document.getElementsByClassName('display-pics')[0].appendChild(divAndImg);
+      displaySection.appendChild(divAndImg);
     }
   } else {
     let index = 0;
@@ -160,10 +156,11 @@ function attachEventListeners() {
 function stopAtTwentyFive() {
   document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
 
+  // list to append li's
+  let list = document.querySelectorAll('.results ol')[0];
+  let resultsSection = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
   Item.allItems.forEach(item => {
-    let list = document.querySelectorAll('.results ol')[0];
-    let resultsSection = document.querySelectorAll('.results')[0];
     resultsSection.style.display = 'block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
