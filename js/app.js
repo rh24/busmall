@@ -7,7 +7,7 @@ function displayChart() {
 
   let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
-    type: 'bar',
+    type: 'doughnut',
     data: {
       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [{
