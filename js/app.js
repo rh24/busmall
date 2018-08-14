@@ -1,3 +1,5 @@
+'use strict';
+
 function Item(filepath, displayName, id) {
   this.filepath = `./assets/${filepath}`;
   this.displayName = displayName;
@@ -98,8 +100,7 @@ const handleClick = (img) => {
   // increment total votes
   totalVotes++;
   // append three new images if not reached max votes
-  if (totalVotes < 2) {
-    // appendThree();
+  if (totalVotes < 25) {
     appendImages(n);
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
