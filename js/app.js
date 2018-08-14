@@ -4,9 +4,9 @@
 function displayChart() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
-  // map each items display names and # of votes to a new object. this will return an arary of objects
+  // map each items display names and # of votes to a new object
+  //this will return an arary of objects with data I want
   let voteData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes }));
-  // debugger;
   let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
     type: 'doughnut',
@@ -18,12 +18,25 @@ function displayChart() {
         data: voteData.map(datum => datum.votes),
         // data: [12, 19, 3, 5, 2, 3],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
+          'rgba(255, 255, 255, 0.6)',
+          'rgba(255, 255, 239, 0.6)',
+          'rgba(242, 242, 242, 0.6)',
+          'rgba(242, 242, 242, 0.6)',
+          'rgba(204, 207, 253, 0.6)',
+          'rgba(187, 188, 220, 0.6)',
+          'rgba(171, 188, 220, 0.6)',
+          'rgba(173, 176, 215, 0.6)',
+          'rgba(154, 160, 252, 0.6)',
+          'rgba(136, 137, 169, 0.6)',
+          'rgba(122, 131, 239, 0.6)',
+          'rgba(63,	69,	125, 0.6)',
+          'rgba(61,	62,	76, 0.6)',
+          'rgba(22,	48,	251, 0.6)',
+          'rgba(35,	40,	150, 0.6)',
+          'rgba(43,	43,	43, 0.6)',
+          'rgba(19,	39,	134, 0.6)',
+          'rgba(4,	25,	165, 0.6)',
+
         ],
         borderColor: [
           'rgba(255,99,132,1)',
