@@ -48,7 +48,7 @@ function displayChart() {
         backgroundColor: backgroundColors,
         borderColor: borderColors,
         borderWidth: 1,
-        radius: 2
+        // radius: 2 // use for polarArea and radar
       }]
     },
     options: {
@@ -72,7 +72,7 @@ function Item(filepath, displayName, id) {
 
 Item.allItems = [];
 
-// doesn't mutate the original array bc we're using a copy
+// doesn't mutate the original array
 Item.sortByVotes = () => {
   // concat returns a new array
   return Item.allItems.concat().sort((a, b) => b.votes - a.votes);
@@ -177,12 +177,13 @@ const handleClick = (img) => {
   displayVotes();
 };
 
-// add event listeners for images
+// attach event listeners to DOM elements
 function attachEventListeners() {
+  // add event listeners for images
   document.querySelectorAll('img').forEach(img => {
     img.addEventListener('click', () => handleClick(img));
   });
-
+  // add event listener for restart button
   document.querySelector('.restart button').addEventListener('click', () => restart());
 }
 
@@ -243,6 +244,7 @@ function displayVotes() {
   document.querySelectorAll('.display-votes h1')[0].textContent = `${totalVotes} / 25 Votes`;
 }
 
+// refresh page if restart button is pressed
 function restart() {
   window.location.reload();
 }
