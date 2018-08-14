@@ -4,6 +4,14 @@
   margin-bottom: 30px;
 }
 
+.display-votes h1 {
+  font-family: 'Shrikhand', cursive;
+  font-size: 60px;
+  display: flex;
+  max-width: 700px;
+  margin-left: 100px;
+}
+
 .results {
   display: none;
   background-color: rgba(212, 196, 193, 0.4);
@@ -25,7 +33,11 @@
 
 .display-pics {
   text-align: center;
-  max-width: 700px;
+  max-width: 70%;
+  /* display: flex; */
+  position: fixed;
+  top: 200px;
+  margin: 0 auto;
 }
 
 .display-pics {

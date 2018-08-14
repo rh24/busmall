@@ -39,7 +39,7 @@ function displayChart() {
 
   let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
-    type: 'polarArea',
+    type: 'horizontalBar',
     data: {
       labels: votes,
       datasets: [{
@@ -182,11 +182,16 @@ function attachEventListeners() {
   document.querySelectorAll('img').forEach(img => {
     img.addEventListener('click', () => handleClick(img));
   });
+
+  document.querySelector('.restart button').addEventListener('click', () => restart());
 }
 
 // turn off event listeners, display total tallies
 function stopAtTwentyFive() {
-  document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
+  document.querySelectorAll('img').forEach(img => {
+    img.removeEventListener('click', handleClick, true);
+    img.style.display = 'none';
+  });
 
   // list to append li's
   let list = document.querySelectorAll('.results ol')[0];
@@ -233,10 +238,13 @@ function createImg(filepath, id) {
   return div;
 }
 
-
+// displays user votes out of 25
 function displayVotes() {
-  // Item.allItems.reduce((acc, currentItem) => a + currentItem.votes);
   document.querySelectorAll('.display-votes h1')[0].textContent = `${totalVotes} / 25 Votes`;
+}
+
+function restart() {
+  window.location.reload();
 }
 
 const n = 6;
