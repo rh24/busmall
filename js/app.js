@@ -1,4 +1,46 @@
 'use strict';
+// import Chart from 'chartjs'; // THis is an ES6 module way to include
+// https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js
+var Chart = require('chart.js');
+var ctx = document.getElementById('myChart');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [{
+      label: '# of Votes',
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255,99,132,1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero:true
+        }
+      }]
+    }
+  }
+});
+// debugger;
+document.getElementsByClassName('chart')[0].append(myChart);
 
 function Item(filepath, displayName, id) {
   this.filepath = `./assets/${filepath}`;
@@ -36,7 +78,7 @@ new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 let currentSet; // stores current set of random indeces
 let previousSet = []; // temporarily stores current set of random indeces to check against values displayed immediately before
 let randIdx; // random index
-let totalVotes = 0; // how do I wrap this in a closure?
+let totalVotes = 2; // how do I wrap this in a closure?
 let listDisplayCount = 0; // prevent double appending results list
 
 // choose n random numbers
@@ -58,7 +100,7 @@ function chooseRandom(n) {
   previousSet = currentSet;
 }
 
-// append images to display-pics html section that currently has display set to none
+// append images to display-pics html section
 function appendImages(n) {
   let divAndImg;
 
@@ -93,14 +135,14 @@ function appendImages(n) {
 
 // save event handler to variable in order to remove event listener later
 const handleClick = (img) => {
-  // find which item is being upvoted
-  let foundItem = Item.allItems.find(item => item.id === img.id);
-  // increcment votes on the item object
-  foundItem.votes++;
-  // increment total votes
-  totalVotes++;
-  // append three new images if not reached max votes
   if (totalVotes < 25) {
+    // find which item is being upvoted
+    let foundItem = Item.allItems.find(item => item.id === img.id);
+    // increcment votes on the item object
+    foundItem.votes++;
+    // increment total votes
+    totalVotes++;
+    // append three new images if not reached max votes
     appendImages(n);
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
