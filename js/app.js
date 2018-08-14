@@ -98,7 +98,7 @@ const handleClick = (img) => {
   // increment total votes
   totalVotes++;
   // append three new images if not reached max votes
-  if (totalVotes < 25) {
+  if (totalVotes < 2) {
     // appendThree();
     appendImages(n);
   } else if (listDisplayCount < 1) {
@@ -117,10 +117,11 @@ function attachEventListeners() {
 function stopAtTwentyFive() {
   document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
 
-  let list = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
-  list.style.display = 'block';
   Item.allItems.forEach(item => {
+    let list = document.querySelectorAll('.results ol')[0];
+    let resultsSection = document.querySelectorAll('.results')[0];
+    resultsSection.style.display = 'block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
   });
