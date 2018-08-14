@@ -47,7 +47,8 @@ function displayChart() {
         data: data,
         backgroundColor: backgroundColors,
         borderColor: borderColors,
-        borderWidth: 1
+        borderWidth: 1,
+        radius: 2
       }]
     },
     options: {
@@ -70,10 +71,14 @@ function Item(filepath, displayName, id) {
 }
 
 Item.allItems = [];
-Item.sortByVote = () => {
-  return Item.allItems.sort((a, b) => b.votes - a.votes);
-};
 
+// doesn't mutate the original array bc we're using a copy
+Item.sortByVotes = () => {
+  // concat returns a new array
+  return Item.allItems.concat().sort((a, b) => b.votes - a.votes);
+  // slice returns a shallow copy of the array
+  // return Array.prototype.slice.call(allItems).sort((a, b) => b.votes - a.votes);
+};
 
 new Item('bag.jpg', 'R2D2 Bag', 'bag');
 new Item('banana.jpg', 'Banana', 'banana');
@@ -157,6 +162,7 @@ function appendImages(n) {
 // save event handler to variable in order to remove event listener later
 const handleClick = (img) => {
   if (totalVotes < 25) {
+    // display total vote count
     // find which item is being upvoted
     let foundItem = Item.allItems.find(item => item.id === img.id);
     // increcment votes on the item object
@@ -168,6 +174,7 @@ const handleClick = (img) => {
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
   }
+  displayVotes();
 };
 
 // add event listeners for images
@@ -185,8 +192,8 @@ function stopAtTwentyFive() {
   let list = document.querySelectorAll('.results ol')[0];
   let resultsSection = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
-  Item.allItems.forEach(item => {
-    resultsSection.style.display = 'inline-block';
+  Item.sortByVotes().forEach(item => {
+    resultsSection.style.display = 'block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
   });
@@ -226,6 +233,11 @@ function createImg(filepath, id) {
   return div;
 }
 
+
+function displayVotes() {
+  // Item.allItems.reduce((acc, currentItem) => a + currentItem.votes);
+  document.querySelectorAll('.display-votes h1')[0].textContent = `${totalVotes} / 25 Votes`;
+}
 
 const n = 6;
 appendImages(n);
