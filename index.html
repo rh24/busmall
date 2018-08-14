@@ -8,6 +8,8 @@
   <link rel="stylesheet" type="text/css" media="screen" href="css/reset.css" />
   <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
   <link href="https://fonts.googleapis.com/css?family=Heebo:900" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
 </head>
 <body>
   <header>
@@ -20,6 +22,10 @@
     </nav>
   </header>
   <main>
+    <div class="restart"><button>Restart</button></div>
+    <section class="display-votes">
+      <h1></h1>
+    </section>
     <section class="display-pics">
     </section>
     <section class="results">
@@ -28,6 +34,10 @@
     </section>
     <section class="product-description">
       <p></p>
+    </section>
+    <section class="charts">
+      <canvas id="votes-chart" width="400" height="400"></canvas>
+      <canvas id="views-chart" width="400" height="400"></canvas>
     </section>
   </main>
   <footer></footer>

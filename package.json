@@ -1,0 +1,23 @@
+{
+  "name": "busmall",
+  "version": "1.0.0",
+  "description": "code 201 week 3",
+  "main": "js/app.js",
+  "dependencies": {
+    "chart.js": "^2.7.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rh24/busmall.git"
+  },
+  "author": "rebecca hong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rh24/busmall/issues"
+  },
+  "homepage": "https://github.com/rh24/busmall#readme"
+}

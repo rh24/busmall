@@ -1,7 +1,28 @@
+.restart {
+  margin-left: 20px;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.display-votes h1 {
+  font-family: 'Shrikhand', cursive;
+  font-size: 60px;
+  max-width: 700px;
+  margin-left: 100px;
+}
+
+.display-votes {
+  min-height: 100px;
+  display: block;
+}
+
 .results {
   display: none;
   background-color: rgba(212, 196, 193, 0.4);
   padding-bottom: 12px;
+  /* min-width: 700px; */
+  /* width: 30%; */
+  /* z-index: 1; */
 }
 
 .results h4 {
@@ -14,13 +35,17 @@
   margin-bottom: 7px;
 }
 
-.display-pics {
+/* .display-pics {
   text-align: center;
-  max-width: 700px;
-}
+  max-width: 70%;
+  max-height: 50%;
+  display: flex;
+  position: fixed;
+  margin: 0 auto;
+} */
 
 .display-pics {
-  float: right;
+  max-width: 80%;
 }
 
 .display-pics div {
@@ -32,6 +57,7 @@
 .display-pics div img {
   width: 200px;
   height: 200px;
+  padding: 2px;
 }
 
 header {
@@ -50,4 +76,12 @@ header nav {
 
 header nav div {
   display: inline-block;
+}
+
+.charts canvas {
+  display: flex;
+  /* z-index: 2; */
+  max-width: 70%;
+  margin: 0 auto;
+  margin-bottom: 30px;
 }

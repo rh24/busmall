@@ -1,4 +1,94 @@
 'use strict';
+// import { ctx, myChart } from '/modules/chart.js';
+
+// make an object of randomly generated colors with different opacities for background and border
+function pickRandomColor() {
+  let colorSet = [];
+  for (let i = 0; i < 3; i++) {
+    colorSet.push(Math.floor(Math.random() * 255) + 1);
+  }
+
+  return ({
+    backgroundColor: `rgba(${colorSet[0]}, ${colorSet[1]}, ${colorSet[2]}, .5)`,
+    borderColor: `rgba(${colorSet[0]}, ${colorSet[1]}, ${colorSet[2]}, 1)`
+  });
+}
+
+// collect n number of random color objects
+function makeArrayOfRandomColors(n) {
+  let randomColors = [];
+
+  for (let i = 0; i < n; i++) {
+    randomColors.push(pickRandomColor());
+  }
+
+  return randomColors;
+}
+
+function makeCharts() {
+  // remove divs with child images on page
+  document.querySelectorAll('.display-pics div').forEach(img => img.remove());
+  // map each items display names and # of votes to a new object
+  // this will return an arary of objects with data that I want
+  let chartData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes, views: item.views}));
+  let productNames = chartData.map(datum => datum.name);
+  let numberOfVotes = chartData.map(datum => datum.votes);
+  let randomColors = makeArrayOfRandomColors(20);
+  let backgroundColors = randomColors.map(colorObj => colorObj.backgroundColor);
+  let borderColors = randomColors.map(colorObj => colorObj.borderColor);
+  let numberOfViews = chartData.map(datum => datum.views);
+
+  const displayVotesChart = (() => {
+    let ctx = document.getElementById('votes-chart');
+    new Chart(ctx, {
+      type: 'horizontalBar',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: '# of Votes',
+          data: numberOfVotes,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+          // radius: 2 // use for polarArea and radar
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Most popular items'
+        }
+      }
+    });
+  })();
+
+  const displayViewsChart = (() => {
+    let ctx = document.getElementById('views-chart');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: '# of Votes',
+          data: numberOfViews,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+          // radius: 2 // use for polarArea and radar
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Most viewed items'
+        }
+      }
+    });
+  })();
+
+  // previously, invoking both functions at the bottom didn't trigger the second chart function
+  // however, for some reason, using IIFE's worked.
+}
 
 function Item(filepath, displayName, id) {
   this.filepath = `./assets/${filepath}`;
@@ -11,6 +101,14 @@ function Item(filepath, displayName, id) {
 }
 
 Item.allItems = [];
+
+// doesn't mutate the original array
+Item.sortByVotes = () => {
+  // concat returns a new array
+  return Item.allItems.concat().sort((a, b) => b.votes - a.votes);
+  // slice returns a shallow copy of the array
+  // return Array.prototype.slice.call(allItems).sort((a, b) => b.votes - a.votes);
+};
 
 new Item('bag.jpg', 'R2D2 Bag', 'bag');
 new Item('banana.jpg', 'Banana', 'banana');
@@ -38,6 +136,7 @@ let previousSet = []; // temporarily stores current set of random indeces to che
 let randIdx; // random index
 let totalVotes = 0; // how do I wrap this in a closure?
 let listDisplayCount = 0; // prevent double appending results list
+let h1 = document.querySelectorAll('.display-votes h1')[0]; // displays votes and messages to user
 
 // choose n random numbers
 function chooseRandom(n) {
@@ -53,14 +152,14 @@ function chooseRandom(n) {
       randIdx = Math.floor(Math.random() * (20 - 0 + 0)) + 0;
     }
   }
-
   // set temporary values to compare against next set of random numbers
   previousSet = currentSet;
 }
 
-// append images to display-pics html section that currently has display set to none
+// append images to display-pics html section
 function appendImages(n) {
   let divAndImg;
+  let displaySection = document.getElementsByClassName('display-pics')[0];
 
   chooseRandom(n);
 
@@ -73,7 +172,7 @@ function appendImages(n) {
       // create div and image
       divAndImg = createImg(item.filepath, item.id);
       // append div and image to display-pics section
-      document.getElementsByClassName('display-pics')[0].appendChild(divAndImg);
+      displaySection.appendChild(divAndImg);
     }
   } else {
     let index = 0;
@@ -93,41 +192,52 @@ function appendImages(n) {
 
 // save event handler to variable in order to remove event listener later
 const handleClick = (img) => {
-  // find which item is being upvoted
-  let foundItem = Item.allItems.find(item => item.id === img.id);
-  // increcment votes on the item object
-  foundItem.votes++;
-  // increment total votes
   totalVotes++;
-  // append three new images if not reached max votes
   if (totalVotes < 25) {
+    // display total vote count
+    // find which item is being upvoted
+    let foundItem = Item.allItems.find(item => item.id === img.id);
+    // increcment votes on the item object
+    foundItem.votes++;
+    // increment total votes
+    // totalVotes++;
+    // append three new images if not reached max votes
     appendImages(n);
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
   }
+  displayVotes();
 };
 
-// add event listeners for images
+// attach event listeners to DOM elements
 function attachEventListeners() {
+  // add event listeners for images
   document.querySelectorAll('img').forEach(img => {
     img.addEventListener('click', () => handleClick(img));
   });
+  // add event listener for restart button
+  document.querySelector('.restart button').addEventListener('click', () => restart());
 }
 
 // turn off event listeners, display total tallies
 function stopAtTwentyFive() {
-  document.querySelectorAll('img').forEach(img => img.removeEventListener('click', handleClick, true));
+  document.querySelectorAll('img').forEach(img => {
+    img.removeEventListener('click', handleClick, true);
+    img.style.display = 'none';
+  });
 
+  // list to append li's
+  let list = document.querySelectorAll('.results ol')[0];
+  let resultsSection = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
-  Item.allItems.forEach(item => {
-    let list = document.querySelectorAll('.results ol')[0];
-    let resultsSection = document.querySelectorAll('.results')[0];
+  Item.sortByVotes().forEach(item => {
     resultsSection.style.display = 'block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
   });
 
   listDisplayCount++;
+  makeCharts();
 }
 
 function createLineItem(type, displayName, id, votes) { // add src parameter if wanting to return appended image
@@ -161,6 +271,15 @@ function createImg(filepath, id) {
   return div;
 }
 
+// displays user votes out of 25
+function displayVotes() {
+  h1.textContent = `${totalVotes} / 25 Votes`;
+}
+
+// refresh page if restart button is pressed
+function restart() {
+  window.location.reload();
+}
 
 const n = 6;
 appendImages(n);
