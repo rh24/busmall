@@ -29,21 +29,24 @@ function displayChart() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
   // map each items display names and # of votes to a new object
-  //this will return an arary of objects with data I want
+  // this will return an arary of objects with data that I want
   let voteData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes }));
-  let ctx = document.getElementById('myChart');
+  let votes = voteData.map(datum => datum.name);
+  let data = voteData.map(datum => datum.votes);
   let randomColors = makeArrayOfRandomColors(20);
+  let backgroundColors = randomColors.map(colorObj => colorObj.backgroundColor);
+  let borderColors = randomColors.map(colorObj => colorObj.borderColor);
+
+  let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      labels: voteData.map(datum => datum.name),
+      labels: votes,
       datasets: [{
         label: '# of Votes',
-        data: voteData.map(datum => datum.votes),
-        // data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: randomColors.map(colorObj => colorObj.backgroundColor),
-        borderColor: randomColors.map(colorObj => colorObj.borderColor),
+        data: data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
         borderWidth: 1
       }]
     },
