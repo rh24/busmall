@@ -39,7 +39,7 @@ function displayChart() {
 
   let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
-    type: 'doughnut',
+    type: 'polarArea',
     data: {
       labels: votes,
       datasets: [{
@@ -51,12 +51,9 @@ function displayChart() {
       }]
     },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          }
-        }]
+      title: {
+        display: true,
+        text: 'Most popular items'
       }
     }
   });
@@ -185,7 +182,7 @@ function stopAtTwentyFive() {
   let resultsSection = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
   Item.allItems.forEach(item => {
-    resultsSection.style.display = 'block';
+    resultsSection.style.display = 'inline-block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
   });
