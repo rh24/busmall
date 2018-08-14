@@ -1,6 +1,30 @@
 'use strict';
 // import { ctx, myChart } from '/modules/chart.js';
 
+// make an object of randomly generated colors with different opacities for background and border
+function pickRandomColor() {
+  let colorSet = [];
+  for (let i = 0; i < 3; i++) {
+    colorSet.push(Math.floor(Math.random() * 255) + 1);
+  }
+
+  return ({
+    backgroundColor: `rgba(${colorSet[0]}, ${colorSet[1]}, ${colorSet[2]}, .5)`,
+    borderColor: `rgba(${colorSet[0]}, ${colorSet[1]}, ${colorSet[2]}, 1)`
+  });
+}
+
+// collect n number of random color objects
+function makeArrayOfRandomColors(n) {
+  let randomColors = [];
+
+  for (let i = 0; i < n; i++) {
+    randomColors.push(pickRandomColor());
+  }
+
+  return randomColors;
+}
+
 function displayChart() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
@@ -8,6 +32,7 @@ function displayChart() {
   //this will return an arary of objects with data I want
   let voteData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes }));
   let ctx = document.getElementById('myChart');
+  let randomColors = makeArrayOfRandomColors(20);
   let myChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
@@ -17,35 +42,8 @@ function displayChart() {
         label: '# of Votes',
         data: voteData.map(datum => datum.votes),
         // data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 255, 255, 0.6)',
-          'rgba(255, 255, 239, 0.6)',
-          'rgba(242, 242, 242, 0.6)',
-          'rgba(242, 242, 242, 0.6)',
-          'rgba(204, 207, 253, 0.6)',
-          'rgba(187, 188, 220, 0.6)',
-          'rgba(171, 188, 220, 0.6)',
-          'rgba(173, 176, 215, 0.6)',
-          'rgba(154, 160, 252, 0.6)',
-          'rgba(136, 137, 169, 0.6)',
-          'rgba(122, 131, 239, 0.6)',
-          'rgba(63,	69,	125, 0.6)',
-          'rgba(61,	62,	76, 0.6)',
-          'rgba(22,	48,	251, 0.6)',
-          'rgba(35,	40,	150, 0.6)',
-          'rgba(43,	43,	43, 0.6)',
-          'rgba(19,	39,	134, 0.6)',
-          'rgba(4,	25,	165, 0.6)',
-
-        ],
-        borderColor: [
-          'rgba(255,99,132,1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
+        backgroundColor: randomColors.map(colorObj => colorObj.backgroundColor),
+        borderColor: randomColors.map(colorObj => colorObj.borderColor),
         borderWidth: 1
       }]
     },
