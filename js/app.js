@@ -4,15 +4,19 @@
 function displayChart() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
-
+  // map each items display names and # of votes to a new object. this will return an arary of objects
+  let voteData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes }));
+  // debugger;
   let ctx = document.getElementById('myChart');
   let myChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      labels: voteData.map(datum => datum.name),
       datasets: [{
         label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3],
+        data: voteData.map(datum => datum.votes),
+        // data: [12, 19, 3, 5, 2, 3],
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',
@@ -80,7 +84,7 @@ new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
 let currentSet; // stores current set of random indeces
 let previousSet = []; // temporarily stores current set of random indeces to check against values displayed immediately before
 let randIdx; // random index
-let totalVotes = 1; // how do I wrap this in a closure?
+let totalVotes = 0; // how do I wrap this in a closure?
 let listDisplayCount = 0; // prevent double appending results list
 
 // choose n random numbers
@@ -137,7 +141,7 @@ function appendImages(n) {
 
 // save event handler to variable in order to remove event listener later
 const handleClick = (img) => {
-  if (totalVotes < 2) {
+  if (totalVotes < 25) {
     // find which item is being upvoted
     let foundItem = Item.allItems.find(item => item.id === img.id);
     // increcment votes on the item object
