@@ -38,4 +38,4 @@ var myChart = new Chart(ctx, {
   }
 });
 
-export default myChart;
+export default [ctx, myChart];

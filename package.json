@@ -2,7 +2,7 @@
   "name": "busmall",
   "version": "1.0.0",
   "description": "code 201 week 3",
-  "main": "main.js",
+  "main": "js/app.js",
   "dependencies": {
     "chart.js": "^2.7.2"
   },
