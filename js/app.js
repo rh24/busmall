@@ -70,6 +70,10 @@ function Item(filepath, displayName, id) {
 }
 
 Item.allItems = [];
+Item.sortByVote = () => {
+  return Item.allItems.sort((a, b) => b.votes - a.votes);
+};
+
 
 new Item('bag.jpg', 'R2D2 Bag', 'bag');
 new Item('banana.jpg', 'Banana', 'banana');
