@@ -25,39 +25,69 @@ function makeArrayOfRandomColors(n) {
   return randomColors;
 }
 
-function displayChart() {
+function makeCharts() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
   // map each items display names and # of votes to a new object
   // this will return an arary of objects with data that I want
-  let voteData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes }));
-  let votes = voteData.map(datum => datum.name);
-  let data = voteData.map(datum => datum.votes);
+  let chartData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes, views: item.views}));
+  let productNames = chartData.map(datum => datum.name);
+  let numberOfVotes = chartData.map(datum => datum.votes);
   let randomColors = makeArrayOfRandomColors(20);
   let backgroundColors = randomColors.map(colorObj => colorObj.backgroundColor);
   let borderColors = randomColors.map(colorObj => colorObj.borderColor);
+  let numberOfViews = chartData.map(datum => datum.views);
 
-  let ctx = document.getElementById('myChart');
-  let myChart = new Chart(ctx, {
-    type: 'horizontalBar',
-    data: {
-      labels: votes,
-      datasets: [{
-        label: '# of Votes',
-        data: data,
-        backgroundColor: backgroundColors,
-        borderColor: borderColors,
-        borderWidth: 1,
-        // radius: 2 // use for polarArea and radar
-      }]
-    },
-    options: {
-      title: {
-        display: true,
-        text: 'Most popular items'
+  const displayVotesChart = (() => {
+    let ctx = document.getElementById('votes-chart');
+    new Chart(ctx, {
+      type: 'horizontalBar',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: '# of Votes',
+          data: numberOfVotes,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+          // radius: 2 // use for polarArea and radar
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Most popular items'
+        }
       }
-    }
-  });
+    });
+  })();
+
+  const displayViewsChart = (() => {
+    let ctx = document.getElementById('views-chart');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: productNames,
+        datasets: [{
+          label: '# of Votes',
+          data: numberOfViews,
+          backgroundColor: backgroundColors,
+          borderColor: borderColors,
+          borderWidth: 1,
+          // radius: 2 // use for polarArea and radar
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Most viewed items'
+        }
+      }
+    });
+  })();
+
+  // previously, invoking both functions at the bottom didn't trigger the second chart function
+  // however, for some reason, using IIFE's worked.
 }
 
 function Item(filepath, displayName, id) {
@@ -106,6 +136,7 @@ let previousSet = []; // temporarily stores current set of random indeces to che
 let randIdx; // random index
 let totalVotes = 0; // how do I wrap this in a closure?
 let listDisplayCount = 0; // prevent double appending results list
+let h1 = document.querySelectorAll('.display-votes h1')[0]; // displays votes and messages to user
 
 // choose n random numbers
 function chooseRandom(n) {
@@ -161,6 +192,7 @@ function appendImages(n) {
 
 // save event handler to variable in order to remove event listener later
 const handleClick = (img) => {
+  totalVotes++;
   if (totalVotes < 25) {
     // display total vote count
     // find which item is being upvoted
@@ -168,7 +200,7 @@ const handleClick = (img) => {
     // increcment votes on the item object
     foundItem.votes++;
     // increment total votes
-    totalVotes++;
+    // totalVotes++;
     // append three new images if not reached max votes
     appendImages(n);
   } else if (listDisplayCount < 1) {
@@ -205,7 +237,7 @@ function stopAtTwentyFive() {
   });
 
   listDisplayCount++;
-  displayChart();
+  makeCharts();
 }
 
 function createLineItem(type, displayName, id, votes) { // add src parameter if wanting to return appended image
@@ -241,7 +273,7 @@ function createImg(filepath, id) {
 
 // displays user votes out of 25
 function displayVotes() {
-  document.querySelectorAll('.display-votes h1')[0].textContent = `${totalVotes} / 25 Votes`;
+  h1.textContent = `${totalVotes} / 25 Votes`;
 }
 
 // refresh page if restart button is pressed
