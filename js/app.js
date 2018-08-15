@@ -2,10 +2,10 @@
 // import { ctx, myChart } from '/modules/chart.js';
 
 // make an object of randomly generated colors with different opacities for background and border
-function pickRandomColor() {
+function pickRandomColor(min, max) {
   let colorSet = [];
   for (let i = 0; i < 3; i++) {
-    colorSet.push(Math.floor(Math.random() * 255) + 1);
+    colorSet.push(Math.floor(Math.random() * max - min + 1) + min);
   }
 
   return ({
@@ -19,7 +19,7 @@ function makeArrayOfRandomColors(n) {
   let randomColors = [];
 
   for (let i = 0; i < n; i++) {
-    randomColors.push(pickRandomColor());
+    randomColors.push(pickRandomColor(0, 255));
   }
 
   return randomColors;
