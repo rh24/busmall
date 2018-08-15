@@ -42,7 +42,7 @@ function makeCharts() {
   // let numberOfViews = chartData.map(datum => datum.views);
 
 
-  // ALTERNATIVE SOLUTION: loop through an existing array one time
+  // REFACTORED SOLUTION: loop through an existing array one time
   let productNames = [], numberOfVotes = [], backgroundColors = [], borderColors = [], numberOfViews = [];
 
   Item.allItems.forEach((item) => {
@@ -159,6 +159,7 @@ let listDisplayCount = 0; // prevent double appending results list
 let h1 = document.querySelectorAll('.display-votes h1')[0]; // displays votes and messages to user
 
 // choose n random numbers
+// but n has to be less than half of Item.allItems.length! Otherwise, code will get stuck in infinite loop!
 function chooseRandom(n) {
   currentSet = [];
 
@@ -301,6 +302,6 @@ function restart() {
   window.location.reload();
 }
 
-const n = 6;
+const n = 11;
 appendImages(n);
 attachEventListeners();
