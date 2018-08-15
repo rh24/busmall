@@ -29,20 +29,6 @@ function makeCharts() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
 
-  // FIRST SOLUTION:
-  // map each items display names and # of votes to a new object
-  // this will return an arary of objects with data that I want
-
-  // let chartData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes, views: item.views}));
-  // let productNames = chartData.map(datum => datum.name);
-  // let numberOfVotes = chartData.map(datum => datum.votes);
-  // let randomColors = makeArrayOfRandomColors(20);
-  // let backgroundColors = randomColors.map(colorObj => colorObj.backgroundColor);
-  // let borderColors = randomColors.map(colorObj => colorObj.borderColor);
-  // let numberOfViews = chartData.map(datum => datum.views);
-
-
-  // REFACTORED SOLUTION: loop through an existing array one time
   let productNames = [], numberOfVotes = [], backgroundColors = [], borderColors = [], numberOfViews = [];
 
   Item.allItems.forEach((item) => {
