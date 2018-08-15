@@ -59,7 +59,7 @@ function makeCharts() {
   });
 
   const displayVotesChart = (() => {
-    let ctx = document.getElementById('votes-chart');
+    let ctx = document.getElementById('votes-chart').getContext('2d');
     new Chart(ctx, {
       type: 'horizontalBar',
       data: {
@@ -83,7 +83,7 @@ function makeCharts() {
   })();
 
   const displayViewsChart = (() => {
-    let ctx = document.getElementById('views-chart');
+    let ctx = document.getElementById('views-chart').getContext('2d');
     new Chart(ctx, {
       type: 'pie',
       data: {
