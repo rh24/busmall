@@ -29,23 +29,11 @@ function makeCharts() {
   // remove divs with child images on page
   document.querySelectorAll('.display-pics div').forEach(img => img.remove());
 
-  // FIRST SOLUTION:
-  // map each items display names and # of votes to a new object
-  // this will return an arary of objects with data that I want
-
-  // let chartData = Item.allItems.map(item => ({ name: item.displayName, votes: item.votes, views: item.views}));
-  // let productNames = chartData.map(datum => datum.name);
-  // let numberOfVotes = chartData.map(datum => datum.votes);
-  // let randomColors = makeArrayOfRandomColors(20);
-  // let backgroundColors = randomColors.map(colorObj => colorObj.backgroundColor);
-  // let borderColors = randomColors.map(colorObj => colorObj.borderColor);
-  // let numberOfViews = chartData.map(datum => datum.views);
-
-
   // REFACTORED SOLUTION: loop through an existing array one time
   let productNames = [], numberOfVotes = [], backgroundColors = [], borderColors = [], numberOfViews = [];
+  let locallyStored = JSON.parse(localStorage.getItem('items'));'';
 
-  Item.allItems.forEach((item) => {
+  locallyStored.forEach((item) => {
     productNames.push(item.displayName);
     numberOfVotes.push(item.votes);
     numberOfViews.push(item.views);
@@ -110,12 +98,12 @@ function makeCharts() {
   // however, for some reason, using IIFE's worked.
 }
 
-function Item(filepath, displayName, id) {
+function Item(filepath, displayName, id, votes = 0, views = 0) {
   this.filepath = `./assets/${filepath}`;
   this.displayName = displayName;
   this.id = id;
-  this.votes = 0;
-  this.views = 0;
+  this.votes = votes;
+  this.views = views;
 
   Item.allItems.push(this);
 }
@@ -123,33 +111,12 @@ function Item(filepath, displayName, id) {
 Item.allItems = [];
 
 // doesn't mutate the original array
-Item.sortByVotes = () => {
+function sortByVotes(arr) {
   // concat returns a new array
-  return Item.allItems.concat().sort((a, b) => b.votes - a.votes);
+  return arr.concat().sort((a, b) => b.votes - a.votes);
   // slice returns a shallow copy of the array
   // return Array.prototype.slice.call(allItems).sort((a, b) => b.votes - a.votes);
-};
-
-new Item('bag.jpg', 'R2D2 Bag', 'bag');
-new Item('banana.jpg', 'Banana', 'banana');
-new Item('bathroom.jpg', 'Bathroom', 'bathroom');
-new Item('boots.jpg', 'Boots', 'boots');
-new Item('breakfast.jpg', 'Breakfast', 'breakfast');
-new Item('bubblegum.jpg', 'Bubblegum', 'bubblegum');
-new Item('chair.jpg', 'Chair', 'chair');
-new Item('cthulhu.jpg', 'Cthulhu', 'cthulhu');
-new Item('dog-duck.jpg', 'Duck mask for dogs', 'dog-duck');
-new Item('dragon.jpg', 'Dragon', 'dragon');
-new Item('pen.jpg', 'Pen', 'pen');
-new Item('pet-sweep.jpg', 'Sweeping suit for animal feet', 'pet-sweep');
-new Item('scissors.jpg', 'Scissors', 'scissors');
-new Item('shark.jpg', 'Shark', 'shark');
-new Item('sweep.png', 'Sweeping suit to make dusty babies', 'sweep');
-new Item('tauntaun.jpg', 'Tauntaun', 'tauntaun');
-new Item('unicorn.jpg', 'Unicorn', 'unicorn');
-new Item('usb.gif', 'USB', 'usb');
-new Item('water-can.jpg', 'Water can', 'water-can');
-new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
+}
 
 let currentSet; // stores current set of random indeces
 let previousSet = []; // temporarily stores current set of random indeces to check against values displayed immediately before
@@ -221,12 +188,13 @@ const handleClick = (img) => {
     // increcment votes on the item object
     foundItem.votes++;
     // increment total votes
-    // totalVotes++;
     // append three new images if not reached max votes
     appendImages(n);
   } else if (listDisplayCount < 1) {
     stopAtTwentyFive();
   }
+
+  // dynamically display number of votes in h1
   displayVotes();
 };
 
@@ -240,25 +208,39 @@ function attachEventListeners() {
   document.querySelector('.restart button').addEventListener('click', () => restart());
 }
 
-// turn off event listeners, display total tallies
+// executes after 25 votes
 function stopAtTwentyFive() {
+  // remove event listeners
   document.querySelectorAll('img').forEach(img => {
     img.removeEventListener('click', handleClick, true);
     img.style.display = 'none';
   });
-
+  // save results to local storage
+  localStorage.setItem('items', JSON.stringify(Item.allItems));
+  //grab newly updated storage items
+  let updatedItems = JSON.parse(localStorage.getItem('items'));
   // list to append li's
   let list = document.querySelectorAll('.results ol')[0];
   let resultsSection = document.querySelectorAll('.results')[0];
   // change display none to display block for results section
-  Item.sortByVotes().forEach(item => {
+  sortByVotes(updatedItems).forEach(item => {
     resultsSection.style.display = 'block';
     let li = createLineItem('li', item.displayName, item.id, item.votes, item.filepath);
     list.appendChild(li);
   });
 
   listDisplayCount++;
-  makeCharts();
+  makeCharts(updatedItems);
+}
+
+function persistChart() {
+  let displaySection = document.getElementsByClassName('display-pics')[0];
+  // debugger;
+  displaySection.style.display = 'none';
+  let persistedItems = JSON.parse(localStorage.getItem('items'));
+  if (persistedItems) {
+    makeCharts(persistedItems);
+  }
 }
 
 function createLineItem(type, displayName, id, votes) { // add src parameter if wanting to return appended image
@@ -273,14 +255,6 @@ function createLineItem(type, displayName, id, votes) { // add src parameter if 
   // return appendImage(li, src);
   return li;
 }
-
-// use if wanting to display image instead of display name
-// function appendImage(li, src) {
-//   let img = document.createElement('img');
-//   img.src = src;
-//   li.appendChild(img);
-//   return li;
-// }
 
 function createImg(filepath, id) {
   let div = document.createElement('div');
@@ -299,9 +273,45 @@ function displayVotes() {
 
 // refresh page if restart button is pressed
 function restart() {
+  // localStorage.removeItem('items');
   window.location.reload();
+  runnerCode();
 }
 
-const n = 6;
-appendImages(n);
-attachEventListeners();
+const n = 3;
+
+function runnerCode() {
+  let locallyStored = JSON.parse(localStorage.getItem('items'));
+  if (locallyStored) {
+    h1.textContent = 'your results';
+    for (let item in locallyStored) {
+      new Item(item.filepath, item.displayName, item.id, item.votes, item.views);
+    }
+    persistChart();
+  } else {
+    new Item('bag.jpg', 'R2D2 Bag', 'bag');
+    new Item('banana.jpg', 'Banana', 'banana');
+    new Item('bathroom.jpg', 'Bathroom', 'bathroom');
+    new Item('boots.jpg', 'Boots', 'boots');
+    new Item('breakfast.jpg', 'Breakfast', 'breakfast');
+    new Item('bubblegum.jpg', 'Bubblegum', 'bubblegum');
+    new Item('chair.jpg', 'Chair', 'chair');
+    new Item('cthulhu.jpg', 'Cthulhu', 'cthulhu');
+    new Item('dog-duck.jpg', 'Duck mask for dogs', 'dog-duck');
+    new Item('dragon.jpg', 'Dragon', 'dragon');
+    new Item('pen.jpg', 'Pen', 'pen');
+    new Item('pet-sweep.jpg', 'Sweeping suit for animal feet', 'pet-sweep');
+    new Item('scissors.jpg', 'Scissors', 'scissors');
+    new Item('shark.jpg', 'Shark', 'shark');
+    new Item('sweep.png', 'Sweeping suit to make dusty babies', 'sweep');
+    new Item('tauntaun.jpg', 'Tauntaun', 'tauntaun');
+    new Item('unicorn.jpg', 'Unicorn', 'unicorn');
+    new Item('usb.gif', 'USB', 'usb');
+    new Item('water-can.jpg', 'Water can', 'water-can');
+    new Item('wine-glass.jpg', 'Wine glass', 'wine-glass');
+  }
+  appendImages(n);
+  attachEventListeners();
+}
+
+runnerCode();
