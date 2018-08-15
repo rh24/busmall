@@ -302,6 +302,6 @@ function restart() {
   window.location.reload();
 }
 
-const n = 11;
+const n = 6;
 appendImages(n);
 attachEventListeners();
