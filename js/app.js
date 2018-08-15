@@ -233,15 +233,15 @@ function stopAtTwentyFive() {
   makeCharts(updatedItems);
 }
 
-function persistChart() {
-  let displaySection = document.getElementsByClassName('display-pics')[0];
-  // debugger;
-  displaySection.style.display = 'none';
-  let persistedItems = JSON.parse(localStorage.getItem('items'));
-  if (persistedItems) {
-    makeCharts(persistedItems);
-  }
-}
+// function persistChart() {
+//   let displaySection = document.getElementsByClassName('display-pics')[0];
+//   // debugger;
+//   displaySection.style.display = 'none';
+//   let persistedItems = JSON.parse(localStorage.getItem('items'));
+//   if (persistedItems) {
+//     makeCharts(persistedItems);
+//   }
+// }
 
 function createLineItem(type, displayName, id, votes) { // add src parameter if wanting to return appended image
   let li = document.createElement(type);
