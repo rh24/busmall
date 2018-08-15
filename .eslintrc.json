@@ -10,6 +10,9 @@
     "browser": true,
     "es6": true
   },
+  "globals": {
+    "Chart": true
+  },
   "rules": {
     "eqeqeq": ["error", "always"],
     "no-console": "off",
